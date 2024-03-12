@@ -4517,7 +4517,7 @@ dnl BeOS support removed after SDL 2.0.1. Haiku still works.  --ryan.
         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -lgcm_sys -lrsx -lsysutil -lio -laudio -lrt -llv2"
         CheckPSL1GHTVideo
         CheckDummyAudio
-        CheckPSL1GHTGL
+        #CheckPSL1GHTGL
 
         # Set up files for the thread library
         if test x$enable_threads = xyes; then
