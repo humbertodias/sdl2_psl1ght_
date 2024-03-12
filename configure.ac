@@ -2510,6 +2510,20 @@ CheckOffscreenVideo()
     fi
 }
 
+dnl Set up the Null video driver.
+CheckPSL1GHTVideo()
+{
+    AC_ARG_ENABLE(video-psl1ght,
+AC_HELP_STRING([--enable-video-psl1ght], [use PSL1GHT video driver [[default=yes]]]),
+                  , enable_video_psl1ght=yes)
+    if test x$enable_video_psl1ght = xyes; then
+        AC_DEFINE(SDL_VIDEO_DRIVER_PSL1GHT, 1, [ ])
+        AC_DEFINE(SDL_VIDEO_RENDER_PSL1GHT, 1, [ ])
+        SOURCES="$SOURCES $srcdir/src/video/psl1ght/*.c $srcdir/src/render/psl1ght/*.c"
+        have_video=yes
+    fi
+}
+
 dnl Set up the QNX video driver if enabled
 CheckQNXVideo()
 {
@@ -2696,6 +2710,16 @@ CheckHaikuGL()
         AC_DEFINE(SDL_VIDEO_RENDER_OGL, 1, [ ])
         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -lGL"
         SUMMARY_video="${SUMMARY_video} opengl"
+    fi
+}
+
+dnl Check for PSL1GHT OpenGL
+CheckPSL1GHTGL()
+{
+    if test x$enable_video = xyes -a x$enable_video_opengl = xyes; then
+        AC_DEFINE(SDL_VIDEO_OPENGL, 1, [ ])
+        AC_DEFINE(SDL_VIDEO_RENDER_OGL, 1, [ ])
+        EXTRA_LDFLAGS="$EXTRA_LDFLAGS -lEGL -lGL -lstdc++ -lm"
     fi
 }
 
@@ -4484,6 +4508,45 @@ dnl BeOS support removed after SDL 2.0.1. Haiku still works.  --ryan.
 
         if test x$enable_video_metal = xyes -o x$enable_video_vulkan = xyes; then
             EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-weak_framework,QuartzCore -Wl,-weak_framework,Metal"
+        fi
+        ;;
+    powerpc64-ps3-elf)
+        ARCH=psl1ght
+        EXTRA_CFLAGS="$EXTRA_CFLAGS -D__PSL1GHT__ -DHAVE_POW -DHAVE_MMAP=0 -DDEBUG_ERROR"
+        EXTRA_CFLAGS="$EXTRA_CFLAGS -I\"$PSL1GHT/ppu/include\" -mcpu=cell "
+        EXTRA_LDFLAGS="$EXTRA_LDFLAGS -lgcm_sys -lrsx -lsysutil -lio -laudio -lrt -llv2"
+        CheckPSL1GHTVideo
+        CheckDummyAudio
+        CheckPSL1GHTGL
+
+        # Set up files for the thread library
+        if test x$enable_threads = xyes; then
+            AC_DEFINE(SDL_THREAD_PSL1GHT)
+            SOURCES="$SOURCES $srcdir/src/thread/psl1ght/*.c"
+            SOURCES="$SOURCES $srcdir/src/thread/generic/SDL_sysmutex.c"
+            SOURCES="$SOURCES $srcdir/src/thread/generic/SDL_syscond.c"
+            SOURCES="$SOURCES $srcdir/src/thread/generic/SDL_systls.c"
+            have_threads=yes
+        fi
+        # Set up files for the joystick library
+        if test x$enable_joystick = xyes; then
+            AC_DEFINE(SDL_JOYSTICK_PSL1GHT)
+            SOURCES="$SOURCES $srcdir/src/joystick/psl1ght/*.c"
+            EXTRA_LDFLAGS="$EXTRA_LDFLAGS -lio"
+            have_joystick=yes
+        fi
+        # Set up files for the timer library
+        if test x$enable_timers = xyes; then
+            AC_DEFINE(SDL_TIMER_PSL1GHT)
+            SOURCES="$SOURCES $srcdir/src/timer/psl1ght/*.c"
+            have_timers=yes
+        fi
+        # Set up files for the audio library
+        if test x$enable_audio = xyes; then
+            AC_DEFINE(SDL_AUDIO_DRIVER_PSL1GHT)
+            SOURCES="$SOURCES $srcdir/src/audio/psl1ght/*.c"
+            EXTRA_LDFLAGS="$EXTRA_LDFLAGS -laudio"
+            have_audio=yes
         fi
         ;;
     *-nacl|*-pnacl)

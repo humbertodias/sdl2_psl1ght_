@@ -223,6 +223,11 @@
 #define __SDL_NOGETPROCADDR__
 #endif
 
+#if defined(__PSL1GHT__)
+#undef __PSL1GHT__
+#define __PSL1GHT__  1
+#endif
+
 #if defined(__vita__)
 #define __VITA__ 1
 #endif

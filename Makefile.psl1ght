@@ -1,0 +1,22 @@
+.PHONY: build
+build:	clean
+
+	./autogen.sh
+
+	## Configure the build.
+	CFLAGS="-O2 -Wall -I${PSL1GHT}/ppu/include" LDFLAGS="-L${PSL1GHT}/ppu/lib -lrt -llv2" ./configure \
+		--prefix="${PS3DEV}/portlibs/ppu" --host=powerpc64-ps3-elf \
+		--enable-atomic=yes --enable-video-psl1ght=yes --enable-joystick=yes --enable-audio=yes \
+		|| { exit 1; }
+
+	make
+
+install:
+	make install
+
+clean:
+	make clean
+
+IMAGE=hldtux/ps3dev
+run:
+	DOCKER_DEFAULT_PLATFORM=linux/amd64 docker run -it --rm -v "`pwd`:/src" -w /src ${IMAGE}
