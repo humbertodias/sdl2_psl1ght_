@@ -582,6 +582,15 @@ static void SDLCALL SDL_LogOutput(void *userdata, int category, SDL_LogPriority 
             (void)fclose(pFile);
         }
     }
+#elif defined(__PSL1GHT__)
+    {
+        FILE *pFile;
+        pFile = fopen("SDL_Log.txt", "a");
+        if (pFile) {
+            (void)fprintf(pFile, "%s: %s\n", SDL_priority_prefixes[priority], message);
+            (void)fclose(pFile);
+        }
+    }
 #endif
 #if defined(HAVE_STDIO_H) && \
     !(defined(__APPLE__) && (defined(SDL_VIDEO_DRIVER_COCOA) || defined(SDL_VIDEO_DRIVER_UIKIT)))
