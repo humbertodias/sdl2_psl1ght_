@@ -87,7 +87,7 @@ SDL_RenderDriver PSL1GHT_RenderDriver = {
     PSL1GHT_CreateRenderer,
     {
      "PSL1GHT",
-     SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_SOFTWARE,
+     SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC,
      1,
      { SDL_PIXELFORMAT_ARGB8888 },
      0,
@@ -128,6 +128,7 @@ PSL1GHT_ActivateRenderer(SDL_Renderer * renderer)
 SDL_Renderer *
 PSL1GHT_CreateRenderer(SDL_Window * window, Uint32 flags)
 {
+    printf("createRendered\n");
     SDL_Renderer *renderer;
     PSL1GHT_RenderData *data;
     SDL_VideoDisplay *display = SDL_GetDisplayForWindow(window);
@@ -359,7 +360,21 @@ PSL1GHT_QueueSetDrawColor(SDL_Renderer * renderer, SDL_RenderCommand *cmd)
 static void
 PSL1GHT_SetTextureScaleMode(SDL_Renderer * renderer, SDL_Texture * texture, SDL_ScaleMode scaleMode)
 {
+    // if (scaleMode == SDL_SCALEMODE_NEAREST) {
+    //     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0"); // Nearest neighbor interpolation
+    // } else if (scaleMode == SDL_SCALEMODE_LINEAR) {
+    //     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"); // Linear interpolation
+    // }
 
+    SDL_RenderSetLogicalSize(renderer, 0, 0); // Reset logical size
+    SDL_RenderSetScale(renderer, 1.0f, 1.0f); // Reset scale
+
+    // Get texture width and height
+    int textureWidth, textureHeight;
+    SDL_QueryTexture(texture, NULL, NULL, &textureWidth, &textureHeight);
+
+    // Set logical size based on texture size
+    SDL_RenderSetLogicalSize(renderer, textureWidth, textureHeight);
 }
 
 static int

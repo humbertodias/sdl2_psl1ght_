@@ -124,11 +124,11 @@ static const SDL_RenderDriver *render_drivers[] = {
 #if SDL_VIDEO_RENDER_VITA_GXM
     &VITA_GXM_RenderDriver,
 #endif
+#if SDL_VIDEO_RENDER_SW
+    &SW_RenderDriver,
+#endif
 #if SDL_VIDEO_RENDER_PSL1GHT
     &PSL1GHT_RenderDriver,
-#endif
-#if SDL_VIDEO_RENDER_SW
-    &SW_RenderDriver
 #endif
 };
 #endif /* !SDL_RENDER_DISABLED */

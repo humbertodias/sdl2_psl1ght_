@@ -29482,7 +29482,7 @@ printf "%s\n" "#define SDL_TIMER_UNIX 1" >>confdefs.h
         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -lgcm_sys -lrsx -lsysutil -lio -laudio -lrt -llv2"
         CheckPSL1GHTVideo
         CheckDummyAudio
-        CheckPSL1GHTGL
+        #CheckPSL1GHTGL
 
         # Set up files for the thread library
         if test x$enable_threads = xyes; then
