@@ -1,17 +1,17 @@
+HowTo Build:
 
-# Simple DirectMedia Layer (SDL) Version 2.0
+You need to build SDL:
+- ooPo's ps3toolchain : https://github.com/ps3dev/ps3toolchain
+- the PSL1GHT SDK : https://github.com/ps3dev/PSL1GHT.git
+- possibly ooPo's ps3libraries : https://github.com/ps3dev/ps3libraries
 
-https://www.libsdl.org/
+Run the script.sh to configure SDL2
 
-Simple DirectMedia Layer is a cross-platform development library designed
-to provide low level access to audio, keyboard, mouse, joystick, and graphics
-hardware via OpenGL and Direct3D. It is used by video playback software,
-emulators, and popular games including Valve's award winning catalog
-and many Humble Bundle games.
+Run make & make install afterthat
 
-More extensive documentation is available in the docs directory, starting
-with README.md
+or
 
-Enjoy!
-
-Sam Lantinga (slouken@libsdl.org)
+```sh
+make -f Makefile.psl1ght && make -f Makefile.psl1ght install
+```
+To built up your source use the -lSDL2 -lm switches
