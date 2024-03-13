@@ -260,7 +260,8 @@ PSL1GHT_CreateDevice(int devindex)
 
 VideoBootStrap PSL1GHT_bootstrap = {
     PSL1GHTVID_DRIVER_NAME, "SDL psl1ght video driver",
-    PSL1GHT_Available, PSL1GHT_CreateDevice
+    PSL1GHT_CreateDevice,
+    NULL /* no ShowMessageBox implementation */
 };
 
 /* vi: set ts=4 sw=4 expandtab: */
